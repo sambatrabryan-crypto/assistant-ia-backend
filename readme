@@ -1,0 +1,50 @@
+@"
+# Assistant IA pour étudiants — Backend
+
+API backend pour le projet "Assistant IA pour étudiants", développée avec FastAPI, PostgreSQL et SQLAlchemy.
+
+## Fonctionnalités
+
+- Authentification (inscription, connexion, JWT)
+- Gestion des matières et cours
+- Upload de documents (PDF)
+- Assistant IA (stub, en attente d'intégration du module RAG)
+- Quiz (création, passage, correction automatique, historique des résultats)
+
+## Lancer le projet avec Docker (recommandé)
+
+Prérequis : Docker Desktop installé et lancé.
+
+``````powershell
+git clone https://github.com/sambatrabryan-crypto/assistant-ia-backend.git
+cd assistant-ia-backend
+docker-compose up --build
+``````
+
+Dans un second terminal, une fois les conteneurs lancés, applique les migrations :
+
+``````powershell
+docker-compose exec backend alembic upgrade head
+``````
+
+L'API est ensuite accessible sur : http://localhost:8000/docs
+
+## Lancer le projet sans Docker (alternative)
+
+Prérequis : Python 3.12+, PostgreSQL installé localement.
+
+``````powershell
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+``````
+
+Crée un fichier ``.env`` à la racine de ``backend/`` à partir de ``.env.example`` et renseigne tes propres identifiants PostgreSQL.
+
+``````powershell
+alembic upgrade head
+python -m uvicorn app.main:app --reload
+``````
+
+## Structure du projet
