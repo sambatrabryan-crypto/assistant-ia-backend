@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:16
+    container_name: assistant_ia_db
+    restart: always
+    environment:
+      POSTGRES_USER: assistant_user
+      POSTGRES_PASSWORD: 250106
+      POSTGRES_DB: assistant_ia
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U assistant_user -d assistant_ia"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    container_name: assistant_ia_backend
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg2://assistant_user:250106@db:5432/assistant_ia
+      SECRET_KEY: une_cle_secrete_longue_et_aleatoire
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./uploads:/app/uploads
+
+volumes:
+  postgres_data:
